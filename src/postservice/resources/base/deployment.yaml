@@ -1,0 +1,61 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-service
+  labels:
+    app: post-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-service
+  template:
+    metadata:
+      labels:
+        app: post-service
+    spec:
+      initContainers:
+      - name: post-service-migrations
+        securityContext:
+          allowPrivilegeEscalation: false
+        image: golang:alpine
+        envFrom:
+        - configMapRef:
+            name: post-service-env
+        - secretRef:
+            name: post-service-postgres-env
+        volumeMounts:
+          - mountPath: /migrations
+            name: migrations
+        command:
+          - sh
+          - "-c"
+          - |
+            go install github.com/jackc/tern@latest
+            tern migrate --migrations /migrations
+      containers:
+      - name: post-service
+        securityContext:
+          allowPrivilegeEscalation: false
+        image: post-service:latest
+        envFrom:
+        - configMapRef:
+            name: post-service-env
+        - secretRef:
+            name: post-service-postgres-env
+        readinessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+      volumes:
+      - name: migrations
+        configMap:
+          name: post-service-migrations

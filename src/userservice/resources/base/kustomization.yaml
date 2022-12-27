@@ -1,0 +1,17 @@
+---
+
+namespace: default
+
+resources:
+  - clusterrole.yaml
+  - deployment.yaml
+  - rolebinding.yaml
+
+configMapGenerator:
+  - name: userservice-env
+    envs:
+      - app.env
+  - name: userservice-migrations
+    files:
+      - ../../postgres/migrations/001_create_schema.sql
+

@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package userService;
+
+option go_package = "./proto;userservice";
+
+import "google/api/annotation.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+service UserService {
+	// GetUserProfile return a profile of a user
+	rpc GetUser(getUserRequest) returns (User){
+		option (google.api.http) = {
+			get: "/v1/user/get-user"
+		};
+	}
+
+	rpc CreateUser(createUserRequest) returns (User){
+		option (google.api.http) = {
+			post: "/v1/user/create-user"
+		};
+	}
+	rpc DeleteUser(deleteUserRequest) returns (google.protobuf.Empty){
+		option (google.api.http) = {
+			delete: "/v1/user/delete-user"
+		};
+	}
+}
+
+message getUserRequest{
+	string id = 1;
+}
+
+message deleteUserRequest{
+	string id = 1;
+}
+
+message createUserRequest{
+	User user = 1;
+}
+
+message User {
+	string id = 1;
+	// external unique_id provided by vcs provider
+	string sub = 2 [(validate.rules).string = {min_len: 3 max_len: 100}];
+	// name of the user
+	string name = 3 [(validate.rules).string={min_len: 1 max_len: 100}];
+	// a username provided by vcs provider
+	string user_name = 4;
+	//email of user
+	string email = 5 [(validate.rules).string.min_len = 0, (validate.rules).string.email= true];
+	// phone of user
+	string phone_number = 6 ;
+	string profile_pic_url = 7 ;
+	google.protobuf.Timestamp token_valid_till = 8;
+}
+
+//		@protoc -I . --proto_path=../../protos --micro_out=. --grpc-gateway_out=. --go-grpc_out=. --go_out=:. --validate_out='lang=go:./' proto/userService.proto

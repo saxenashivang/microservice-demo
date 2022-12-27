@@ -1,0 +1,61 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userservice
+  labels:
+    app: userservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userservice
+  template:
+    metadata:
+      labels:
+        app: userservice
+    spec:
+      initContainers:
+      - name: userservice-migrations
+        securityContext:
+          allowPrivilegeEscalation: false
+        image: golang:alpine
+        envFrom:
+        - configMapRef:
+            name: userservice-env
+        - secretRef:
+            name: userservice-postgres-env
+        volumeMounts:
+          - mountPath: /migrations
+            name: migrations
+        command:
+          - sh
+          - "-c"
+          - |
+            go install github.com/jackc/tern@latest
+            tern migrate --migrations /migrations
+      containers:
+      - name: userservice
+        securityContext:
+          allowPrivilegeEscalation: false
+        image: userservice:latest
+        envFrom:
+        - configMapRef:
+            name: userservice-env
+        - secretRef:
+            name: userservice-postgres-env
+        readinessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+      volumes:
+      - name: migrations
+        configMap:
+          name: userservice-migrations

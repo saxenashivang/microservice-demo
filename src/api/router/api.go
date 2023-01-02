@@ -10,7 +10,10 @@ func Api() *gin.Engine {
 	router := gin.Default()
 	/* Public API */
 	router.GET("/api/v1/ping", handler.Pong)
-	router.GET("/api/v1/get-post", handler.GetPost)
+	//router.GET("/api/v1/get-post", handler.GetPost)
+	router.POST("/api/v1/create-user", handler.CreateUser)
+	router.GET("/api/v1/get-user", handler.GetUser)
+	//router.GET("/api/v1/delete-user", handler.GetPost)
 
 	/* Private API */
 	// middleware implementation gin based

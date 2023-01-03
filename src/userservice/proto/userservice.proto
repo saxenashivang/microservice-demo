@@ -43,8 +43,6 @@ message createUserRequest{
 
 message User {
 	string id = 1;
-	// external unique_id provided by vcs provider
-	string sub = 2 [(validate.rules).string = {min_len: 3 max_len: 100}];
 	// name of the user
 	string name = 3 [(validate.rules).string={min_len: 1 max_len: 100}];
 	// a username provided by vcs provider
@@ -54,7 +52,7 @@ message User {
 	// phone of user
 	string phone_number = 6 ;
 	string profile_pic_url = 7 ;
-	google.protobuf.Timestamp token_valid_till = 8;
+	google.protobuf.Timestamp created_on = 8;
 }
 
 //		@protoc -I . --proto_path=../../protos --micro_out=. --grpc-gateway_out=. --go-grpc_out=. --go_out=:. --validate_out='lang=go:./' proto/userService.proto

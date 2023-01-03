@@ -1,37 +1,34 @@
 package postgres
 
 import (
-	"context"
-
-	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/pkg/errors"
-
-	"userservice/postgres/sqlc"
+	"go-micro.dev/v4/logger"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type DB struct {
-	conn *sqlc.Queries
+	db *gorm.DB
 }
 
-func NewDB(connString string) (*DB, func(), error) {
+func NewDB(connString string) (*gorm.DB, error) {
 	// Do not use main context since some business logic closing down might still
 	//  need to commit to database. Be sure to defer pool.Close in main.
-	pool, err := pgxpool.Connect(context.Background(), connString)
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  connString,
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "Failed to create pgx connection pool")
+		panic(err)
 	}
-
-	db := DB{
-		conn: sqlc.New(pool),
-	}
-	return &db, pool.Close, nil
+	logger.Infof("Connected to Database")
+	return db, nil
 }
 
 // QueryExample is a example of how you can use sqlc to create your database layer
-func (db *DB) QueryExample() (int, error) {
-	i, err := db.conn.SampleQuery(context.Background())
-	if err != nil {
-		return int(i), errors.Wrap(err, "Failed to query SampleQuery")
-	}
-	return int(i), nil
-}
+//func (db *DB) QueryExample() (int, error) {
+//	i, err := db.conn.SampleQuery(context.Background())
+//	if err != nil {
+//		return int(i), errors.Wrap(err, "Failed to query SampleQuery")
+//	}
+//	return int(i), nil
+//}

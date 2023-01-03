@@ -4,25 +4,20 @@ import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
 	"gorm.io/gorm"
-	model "postservice/postgres/gorm"
-	pb "postservice/proto"
+	model "userservice/postgres/gorm"
+	pb "userservice/proto"
 )
 
-type PostStore interface {
-	CreatePost(context.Context, *pb.Post, *pb.Post) error
-	GetPost(context.Context, *pb.GetPostRequest, *pb.Post) error
-	DeletePost(context.Context, *pb.DeletePostRequest, *empty.Empty) error
-	UpdatePost(context.Context, *pb.UpdatePostRequest, *pb.Post) error
-	ListPosts(context.Context, *empty.Empty, *pb.ListPostResponse) error
+type UserStore interface {
+	GetUser(ctx context.Context, in *pb.GetUserRequest, out *pb.User) error
+	CreateUser(ctx context.Context, in *pb.CreateUserRequest, out *pb.User) error
+	DeleteUser(ctx context.Context, in *pb.DeleteUserRequest, out *empty.Empty) error
 }
 
-func NewPostsServer(
-	db *gorm.DB,
-) pb.PostsServiceHandler {
-
+func NewPostStore(db *gorm.DB) pb.UserServiceHandler {
 	//initial migration of databases: schema migration
 	model.InitialMigrationUserProfile(db)
-	return &PostPgStore{
+	return &UserPgStore{
 		db: db,
 	}
 }

@@ -14,9 +14,9 @@ import (
 
 	"github.com/go-micro/cli/debug/trace/jaeger"
 
-	grpcc "github.com/go-micro/plugins/v4/client/grpc"
-	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 	"userservice/config"
+	"userservice/postgres"
+	store "userservice/postgres/gorm/store"
 )
 
 var (
@@ -45,8 +45,8 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer()),
-		micro.Client(grpcc.NewClient()),
+		//micro.Server(grpcs.NewServer()),
+		//micro.Client(grpcc.NewClient()),
 		micro.BeforeStart(func() error {
 			logger.Infof("Starting service %s", service)
 			return nil
@@ -65,6 +65,7 @@ func main() {
 		micro.WrapHandler(ot.NewHandlerWrapper(tracer)),
 		micro.WrapSubscriber(ot.NewSubscriberWrapper(tracer)),
 	)
+
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
@@ -75,6 +76,13 @@ func main() {
 
 	ctx = server.NewContext(ctx, srv.Server())
 
+	//check DB connection and migration
+	dsn := "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := postgres.NewDB(dsn)
+	if err != nil {
+		logger.Infof("Unable to connect to DB %s", err)
+	}
+	store.NewPostStore(db)
 	// Register handler
 	if err := pb.RegisterUserServiceHandler(srv.Server(), new(handler.UserService)); err != nil {
 		logger.Fatal(err)

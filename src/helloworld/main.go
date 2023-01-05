@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"userservice/handler"
-	pb "userservice/proto"
+	"helloworld/handler"
+	pb "helloworld/proto"
 
 	ot "github.com/go-micro/plugins/v4/wrapper/trace/opentracing"
 	"go-micro.dev/v4"
@@ -14,24 +14,16 @@ import (
 
 	"github.com/go-micro/cli/debug/trace/jaeger"
 
-	"userservice/config"
-	"userservice/postgres"
-	store "userservice/postgres/gorm/store"
-
 	grpcc "github.com/go-micro/plugins/v4/client/grpc"
 	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 )
 
 var (
-	service = "userservice"
+	service = "helloworld"
 	version = "latest"
 )
 
 func main() {
-	// Load conigurations
-	if err := config.Load(); err != nil {
-		logger.Fatal(err)
-	}
 	// Create tracer
 	tracer, closer, err := jaeger.NewTracer(
 		jaeger.Name(service),
@@ -68,7 +60,6 @@ func main() {
 		micro.WrapHandler(ot.NewHandlerWrapper(tracer)),
 		micro.WrapSubscriber(ot.NewSubscriberWrapper(tracer)),
 	)
-
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
@@ -79,22 +70,10 @@ func main() {
 
 	ctx = server.NewContext(ctx, srv.Server())
 
-	//check DB connection and migration
-	dsn := "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := postgres.NewDB(dsn)
-	if err != nil {
-		logger.Infof("Unable to connect to DB %s", err)
-	}
-	store := store.NewPostStore(db)
 	// Register handler
-	if err := pb.RegisterUserServiceHandler(srv.Server(), store); err != nil {
+	if err := pb.RegisterHelloworldHandler(srv.Server(), new(handler.Helloworld)); err != nil {
 		logger.Fatal(err)
 	}
-
-	// if err := pb.RegisterUserServiceServer(grpcs.NewServer()); err != nil {
-
-	// }
-
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {
 		logger.Fatal(err)
 	}

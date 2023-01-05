@@ -2,10 +2,13 @@ package store
 
 import (
 	"context"
+	pb "userservice/proto"
+
+	model "userservice/postgres/gorm"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"go-micro.dev/v4/logger"
 	"gorm.io/gorm"
-	pb "userservice/proto"
 )
 
 type UserPgStore struct {
@@ -14,7 +17,7 @@ type UserPgStore struct {
 
 func (e *UserPgStore) GetUser(ctx context.Context, req *pb.GetUserRequest, res *pb.User) error {
 	logger.Infof("Received GetUser.Call request: %v", req)
-	res = &pb.User{
+	user := &pb.User{
 		Id:            "1",
 		Name:          "3",
 		UserName:      "4",
@@ -23,19 +26,24 @@ func (e *UserPgStore) GetUser(ctx context.Context, req *pb.GetUserRequest, res *
 		ProfilePicUrl: "7",
 		CreatedOn:     nil,
 	}
+	res.Id = user.Id
+	res.Email = user.Email
+	res.CreatedOn = user.CreatedOn
+	res.Name = user.Name
+	res.UserName = user.UserName
+	res.ProfilePicUrl = user.ProfilePicUrl
+	logger.Infof("Payload: %v", res)
 	return nil
 }
 func (e *UserPgStore) CreateUser(ctx context.Context, req *pb.CreateUserRequest, res *pb.User) error {
-	res = &pb.User{
-		Id:            req.User.Id,
-		Name:          req.User.Name,
-		UserName:      req.User.UserName,
-		Email:         req.User.Email,
-		PhoneNumber:   req.User.PhoneNumber,
-		ProfilePicUrl: req.User.ProfilePicUrl,
-		CreatedOn:     nil,
+	out := &model.User{
+		ID:          1,
+		Name:        req.User.Name,
+		UserName:    req.User.UserName,
+		Email:       req.User.Email,
+		PhoneNumber: req.User.PhoneNumber,
 	}
-	e.db.Select("Name", "UserName", "CreatedAt", "Email", "PhoneNumber", "ProfilePicUrl").Create(&res)
+	e.db.Create(&out)
 	return nil
 }
 func (e *UserPgStore) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest, res *empty.Empty) error {

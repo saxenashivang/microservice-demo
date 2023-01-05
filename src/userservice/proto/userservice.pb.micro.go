@@ -6,10 +6,10 @@ package userservice
 import (
 	fmt "fmt"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
-	empty "github.com/golang/protobuf/ptypes/empty"
-	_ "github.com/golang/protobuf/ptypes/timestamp"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	proto "google.golang.org/protobuf/proto"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	math "math"
 )
 
@@ -62,7 +62,7 @@ type UserService interface {
 	// GetUserProfile return a profile of a user
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...client.CallOption) (*User, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...client.CallOption) (*User, error)
-	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...client.CallOption) (*empty.Empty, error)
+	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...client.CallOption) (*emptypb.Empty, error)
 }
 
 type userService struct {
@@ -97,9 +97,9 @@ func (c *userService) CreateUser(ctx context.Context, in *CreateUserRequest, opt
 	return out, nil
 }
 
-func (c *userService) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...client.CallOption) (*empty.Empty, error) {
+func (c *userService) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...client.CallOption) (*emptypb.Empty, error) {
 	req := c.c.NewRequest(c.name, "UserService.DeleteUser", in)
-	out := new(empty.Empty)
+	out := new(emptypb.Empty)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -113,14 +113,14 @@ type UserServiceHandler interface {
 	// GetUserProfile return a profile of a user
 	GetUser(context.Context, *GetUserRequest, *User) error
 	CreateUser(context.Context, *CreateUserRequest, *User) error
-	DeleteUser(context.Context, *DeleteUserRequest, *empty.Empty) error
+	DeleteUser(context.Context, *DeleteUserRequest, *emptypb.Empty) error
 }
 
 func RegisterUserServiceHandler(s server.Server, hdlr UserServiceHandler, opts ...server.HandlerOption) error {
 	type userService interface {
 		GetUser(ctx context.Context, in *GetUserRequest, out *User) error
 		CreateUser(ctx context.Context, in *CreateUserRequest, out *User) error
-		DeleteUser(ctx context.Context, in *DeleteUserRequest, out *empty.Empty) error
+		DeleteUser(ctx context.Context, in *DeleteUserRequest, out *emptypb.Empty) error
 	}
 	type UserService struct {
 		userService
@@ -159,6 +159,6 @@ func (h *userServiceHandler) CreateUser(ctx context.Context, in *CreateUserReque
 	return h.UserServiceHandler.CreateUser(ctx, in, out)
 }
 
-func (h *userServiceHandler) DeleteUser(ctx context.Context, in *DeleteUserRequest, out *empty.Empty) error {
+func (h *userServiceHandler) DeleteUser(ctx context.Context, in *DeleteUserRequest, out *emptypb.Empty) error {
 	return h.UserServiceHandler.DeleteUser(ctx, in, out)
 }

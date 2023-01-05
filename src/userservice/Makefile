@@ -11,7 +11,7 @@ init:
 .PHONY: proto
 proto:
 	@protoc -I . --proto_path=../../protos --micro_out=. --go_out=:. --go-grpc_out=. --go-grpc_opt=paths=source_relative --validate_out='lang=go:./' proto/userservice.proto
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/health.proto
+	@protoc --proto_path=. --micro_out=. --go_out=:. proto/userservicehealth.proto
 	
 
 .PHONY: update

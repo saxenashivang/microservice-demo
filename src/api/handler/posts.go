@@ -1,25 +1,28 @@
 package handler
 
-type PostHandler struct{}
+import (
+	postpb "postservice/proto"
 
-var post PostHandler
+	"github.com/gin-gonic/gin"
+	"go-micro.dev/v4"
+)
 
-//func (p *PostHandler) connPostServiceViaGRPC() postpb.PostsService {
-//	srv := micro.NewService()
-//
-//	srv.Init()
-//
-//	// Create client
-//	c := postpb.NewPostsService("postservice", srv.Client())
-//	return c
-//}
-//
-//func GetPost(c *gin.Context) {
-//	conn := post.connPostServiceViaGRPC()
-//	res, err := conn.GetPost(c, &postpb.GetPostRequest{Id: "1"})
-//	if err != nil {
-//		c.AbortWithStatusJSON(400, gin.H{"status": false, "error": err})
-//		return
-//	}
-//	c.JSON(200, res)
-//}
+type PostHandler struct {
+	con postpb.PostsService
+}
+
+func NewPostHandler(srv micro.Service) *PostHandler {
+	c := postpb.NewPostsService("post-service", srv.Client())
+	return &PostHandler{
+		con: c,
+	}
+}
+
+func (e *PostHandler) GetPost(c *gin.Context) {
+	res, err := e.con.GetPost(c, &postpb.GetPostRequest{Id: "1"})
+	if err != nil {
+		c.AbortWithStatusJSON(400, gin.H{"status": false, "error": err})
+		return
+	}
+	c.JSON(200, res)
+}

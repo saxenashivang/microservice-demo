@@ -6,7 +6,9 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.9.1
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-micro/cli v1.1.4
+	github.com/go-micro/plugins/v4/client/grpc v1.2.0
 	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1
+	github.com/go-micro/plugins/v4/server/grpc v1.2.0
 	github.com/go-micro/plugins/v4/server/http v1.2.0
 	github.com/go-micro/plugins/v4/wrapper/trace/opentracing v1.2.0
 	github.com/golang/protobuf v1.5.2

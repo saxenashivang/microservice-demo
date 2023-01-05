@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-micro/plugins/v4/client/grpc v1.2.0
 	go-micro.dev/v4 v4.9.0
+	postservice v0.0.0-00010101000000-000000000000
 	userservice v0.0.0-00010101000000-000000000000
 )
 

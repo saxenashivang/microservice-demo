@@ -5,14 +5,19 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"go-micro.dev/v4"
 )
 
-func Api() *gin.Engine {
+func Api(srv micro.Service) *gin.Engine {
 	router := gin.Default()
+	user := handler.NewUserHandler(srv)
+	post := handler.NewPostHandler(srv)
 	/* Public API */
 	router.GET("/api/v1/ping", handler.Pong)
-	router.POST("/api/v1/create-user", handler.CreateUser)
-	router.GET("/api/v1/get-user", handler.GetUser)
+	router.POST("/api/v1/create-user", user.CreateUser)
+	router.GET("/api/v1/get-user", user.GetUser)
+
+	router.GET("/api/v1/get-post", post.GetPost)
 
 	/* Private API */
 	// middleware implementation gin based

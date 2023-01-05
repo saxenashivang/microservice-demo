@@ -69,10 +69,15 @@ github.com/go-kit/log v0.1.0/go.mod h1:zbhenjAZHb184qTLMA9ZjW7ThYL0H2mk7Q6pNt4vb
 github.com/go-logfmt/logfmt v0.5.0/go.mod h1:wCYkCAKZfumFQihp8CzCvQ3paCTfi41vtzG1KdI/P7A=
 github.com/go-micro/cli v1.1.4 h1:q54NkGZbsjAqPksV0AUoKcnkMlDqClCyX8CcjBv87DA=
 github.com/go-micro/cli v1.1.4/go.mod h1:Xigre7n3aN5Sj/kuQHn91dA+oYzrPNzuUhdmleUWhdc=
+github.com/go-micro/plugins/v4/client/grpc v1.2.0 h1:Z8BB6jqslXM2aMMhjZ+QfNuzR+msCMtGd83DGlsQQG0=
+github.com/go-micro/plugins/v4/client/grpc v1.2.0/go.mod h1:3fDuzyfYLwEImn8+lkhKl3W4Ay1jFevkTeC32PBlgQs=
 github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1 h1:nzwyyK2JKJtmJ8w0CRn9zsn4+kwJitx8CYfAWH99eiI=
 github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1/go.mod h1:u78+qWLUq8jxu/CF4UW+1UUtNgBz67x27ar2kV5Dd/o=
+github.com/go-micro/plugins/v4/server/grpc v1.2.0 h1:lXfM+/0oE/u1g0hVBYsvbP4lYOYXYOmwf5qH7ghi7Cc=
+github.com/go-micro/plugins/v4/server/grpc v1.2.0/go.mod h1:+Ah9Pf/vMSXxBM3fup/hc3N+zN2as3nIpcRaR4sBjnY=
 github.com/go-micro/plugins/v4/server/http v1.2.0 h1:7wgXxdTMSwCfxpUdmOdllyJQRZk9ZtMK5WhankTdKcs=
 github.com/go-micro/plugins/v4/server/http v1.2.0/go.mod h1:YuAjaSPxcn3LI8j2FUsqx0Rxunrj4YwDV41Ax76rLl0=
+github.com/go-micro/plugins/v4/transport/grpc v1.1.0 h1:mXfDYfFQLnVDzjGY3o84oe4prfux9h8txsnA19dKsj8=
 github.com/go-micro/plugins/v4/wrapper/trace/opentracing v1.2.0 h1:hMOVNOHdt7nnBf1XCk6kE5lvKvyBfqJTuRJU1CGHkcU=
 github.com/go-micro/plugins/v4/wrapper/trace/opentracing v1.2.0/go.mod h1:YQmGiIdZ0i6OTVtCFU9ckUWHeLdc1TxzD5D4yAaJTWQ=
 github.com/go-playground/assert/v2 v2.0.1 h1:MsBgLAaY856+nPRTKrp3/OZK38U/wa0CcBYNjji3q3A=
@@ -424,6 +429,7 @@ google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37 h1:jmIfw8+gSvXcZSg
 google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37/go.mod h1:RGgjbofJ8xD9Sq1VVhDM1Vok1vRONV+rg+CjzG4SZKM=
 google.golang.org/grpc v1.51.0 h1:E1eGv1FTqoLIdnBCZufiSHgKjlqG6fKFf6pPWtMTh8U=
 google.golang.org/grpc v1.51.0/go.mod h1:wgNDFcnuBGmxLKI/qn4T+m5BtEBYXJPvibbUPsAIPww=
+google.golang.org/grpc/examples v0.0.0-20211102180624-670c133e568e h1:m7aQHHqd0q89mRwhwS9Bx2rjyl/hsFAeta+uGrHsQaU=
 google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp09yW+WbY/TyQbw=
 google.golang.org/protobuf v1.26.0/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQnmE0givc=
 google.golang.org/protobuf v1.28.1 h1:d0NfwRgPtno5B1Wa6L2DAG+KivqkdutMf1UhdNx175w=

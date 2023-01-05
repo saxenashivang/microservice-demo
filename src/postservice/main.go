@@ -13,6 +13,8 @@ import (
 	"go-micro.dev/v4/server"
 
 	"github.com/go-micro/cli/debug/trace/jaeger"
+	grpcc "github.com/go-micro/plugins/v4/client/grpc"
+	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 )
 
 var (
@@ -37,8 +39,8 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		//micro.Server(grpcs.NewServer()),
-		//micro.Client(grpcc.NewClient()),
+		micro.Server(grpcs.NewServer()),
+		micro.Client(grpcc.NewClient()),
 		micro.BeforeStart(func() error {
 			logger.Infof("Starting service %s", service)
 			return nil

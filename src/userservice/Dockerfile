@@ -14,9 +14,9 @@ chmod +x /bin/grpc_health_probe
 
 # Build Go binary
 COPY Makefile go.mod go.sum ./
-RUN --mount=type=cache,mode=0755,target=/go/pkg/mod make init && go mod download 
+RUN --mount=type=cache,mode=0755,target=/go/pkg/mod make init && go mod download
 COPY . .
-RUN --mount=type=cache,target=/root/.cache/go-build --mount=type=cache,mode=0755,target=/go/pkg/mod make proto tidy build
+RUN --mount=type=cache,target=/root/.cache/go-build --mount=type=cache,mode=0755,target=/go/pkg/mod make tidy build
 
 # Deployment container
 FROM scratch

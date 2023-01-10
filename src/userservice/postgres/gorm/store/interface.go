@@ -2,10 +2,11 @@ package store
 
 import (
 	"context"
+
 	"github.com/golang/protobuf/ptypes/empty"
+	model "github.com/saxenashivang/microservice-demo/src/userservice/postgres/gorm"
+	pb "github.com/saxenashivang/microservice-demo/src/userservice/proto"
 	"gorm.io/gorm"
-	model "userservice/postgres/gorm"
-	pb "userservice/proto"
 )
 
 type UserStore interface {

@@ -2,9 +2,10 @@ package store
 
 import (
 	"context"
-	pb "userservice/proto"
 
-	model "userservice/postgres/gorm"
+	pb "github.com/saxenashivang/microservice-demo/src/userservice/proto"
+
+	model "github.com/saxenashivang/microservice-demo/src/userservice/postgres/gorm"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"go-micro.dev/v4/logger"

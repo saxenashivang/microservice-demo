@@ -8,9 +8,7 @@ init:
 
 .PHONY: proto
 proto:
-	@protoc -I . --proto_path=../../protos --micro_out=. --go_out=:. --go-grpc_out=. --go-grpc_opt=paths=source_relative --validate_out='lang=go:./' proto/userservice.proto
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/userservicehealth.proto
-	
+	@protoc --proto_path=. --micro_out=. --go_out=:. proto/helloworld.proto
 
 .PHONY: update
 update:
@@ -22,7 +20,7 @@ tidy:
 
 .PHONY: build
 build:
-	@go build -o userservice *.go
+	@go build -o helloworld *.go
 
 .PHONY: test
 test:
@@ -30,8 +28,4 @@ test:
 
 .PHONY: docker
 docker:
-	@DOCKER_BUILDKIT=1 docker build -t userservice:latest .
-
-.PHONY: sqlc
-sqlc:
-	@sqlc generate -f ./postgres/sqlc.yaml
+	@docker build -t helloworld:latest .

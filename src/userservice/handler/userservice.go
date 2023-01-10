@@ -2,10 +2,11 @@ package handler
 
 import (
 	"context"
+
 	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/saxenashivang/microservice-demo/src/userservice/postgres/gorm/store"
+	pb "github.com/saxenashivang/microservice-demo/src/userservice/proto"
 	"go-micro.dev/v4/logger"
-	"userservice/postgres/gorm/store"
-	pb "userservice/proto"
 )
 
 type UserService struct {

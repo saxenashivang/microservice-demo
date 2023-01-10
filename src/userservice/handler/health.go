@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "userservice/proto"
+	pb "github.com/saxenashivang/microservice-demo/src/userservice/proto"
 )
 
 type Health struct{}

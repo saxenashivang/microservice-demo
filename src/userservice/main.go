@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"userservice/handler"
-	pb "userservice/proto"
+	"github.com/saxenashivang/microservice-demo/src/userservice/handler"
+	pb "github.com/saxenashivang/microservice-demo/src/userservice/proto"
 
 	ot "github.com/go-micro/plugins/v4/wrapper/trace/opentracing"
 	"go-micro.dev/v4"
@@ -14,9 +14,7 @@ import (
 
 	"github.com/go-micro/cli/debug/trace/jaeger"
 
-	"userservice/config"
-	"userservice/postgres"
-	store "userservice/postgres/gorm/store"
+	"github.com/saxenashivang/microservice-demo/src/userservice/config"
 
 	grpcc "github.com/go-micro/plugins/v4/client/grpc"
 	grpcs "github.com/go-micro/plugins/v4/server/grpc"
@@ -72,6 +70,7 @@ func main() {
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
+		micro.Address(":9001"),
 	)
 	srv.Server().Init(
 		server.Wait(&wg),
@@ -80,14 +79,14 @@ func main() {
 	ctx = server.NewContext(ctx, srv.Server())
 
 	//check DB connection and migration
-	dsn := "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := postgres.NewDB(dsn)
+	// dsn := "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	// db, err := postgres.NewDB(dsn)
 	if err != nil {
 		logger.Infof("Unable to connect to DB %s", err)
 	}
-	store := store.NewPostStore(db)
+	// store := store.NewPostStore(db)
 	// Register handler
-	if err := pb.RegisterUserServiceHandler(srv.Server(), store); err != nil {
+	if err := pb.RegisterUserServiceHandler(srv.Server(), new(handler.UserService)); err != nil {
 		logger.Fatal(err)
 	}
 
